@@ -205,7 +205,6 @@ CREATE INDEX idx_factura_empleado ON factura (id_empleado);
 CREATE INDEX idx_factura_vencimiento ON factura (fecha_vencimiento);
 CREATE INDEX idx_factura_estado ON factura (estado);
 CREATE INDEX idx_detalle_producto ON detalle_factura (id_producto);
-CREATE INDEX idx_detalle_producto ON detalle_factura (id_producto);
 CREATE INDEX idx_nota_factura ON nota_credito (id_factura);
 CREATE INDEX idx_pago_cliente ON pago (id_cliente);
 CREATE INDEX idx_pago_metodo ON pago (id_metodo_pago);
