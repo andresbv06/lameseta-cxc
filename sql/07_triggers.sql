@@ -1,4 +1,4 @@
--- Script 07: disparadores.
+-- Script 07: disparadores (triggers). Se ejecutan solos cuando cambia una tabla.
 SET DEFINE OFF
 
 CREATE OR REPLACE TRIGGER trg_factura_estado

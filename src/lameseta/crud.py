@@ -1,4 +1,4 @@
-"""CRUD generico de las 13 tablas. Cada operacion llama al paquete PKG_<TABLA> de la base de datos."""
+"""Crear, ver, cambiar y borrar datos de las 13 tablas, usando los paquetes de la base de datos."""
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -7,7 +7,7 @@ from .tipos import Campo, Entidad
 
 
 def convertir(campo: Campo, valor):
-    """Prepara un valor de Python para enviarlo a Oracle."""
+    """Convierte un valor para enviarlo a Oracle."""
     if valor is None or valor == "":
         return None
     if campo.tipo == "bool":
@@ -30,7 +30,7 @@ def _valores(campos, datos: dict):
 
 
 def insertar(sesion: Sesion, ent: Entidad, datos: dict):
-    """Inserta una fila. Devuelve el id nuevo (o None si la llave es compuesta)."""
+    """Agrega una fila y devuelve su id nuevo."""
     argumentos = _valores(ent.insertar, datos)
     if ent.pk_auto:
         argumentos.append(Salida(int))

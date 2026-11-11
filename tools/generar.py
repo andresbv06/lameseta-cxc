@@ -64,7 +64,7 @@ def ddl_tabla(t):
 
 def sql_tablas():
     out = ["-- Script 01: tablas, secuencias, indices y comentarios.",
-           "-- Ejecutar conectado como el usuario LAMESETA (PDB, no CDB$ROOT).", "SET DEFINE OFF", ""]
+           "-- Ejecutar conectado como el usuario LAMESETA.", "SET DEFINE OFF", ""]
     for t in TABLAS:
         if t["seq"]:
             out.append(f"CREATE SEQUENCE {t['seq'].lower()} START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;")
@@ -234,7 +234,7 @@ def corregir_handlers(texto):
 
 def sql_paquetes():
     out = ["-- Script 05: paquetes con el CRUD de las 13 tablas (insertar, actualizar, eliminar, obtener, listar).",
-           "-- Ninguna operacion hace COMMIT: lo controla quien llama (el programa Python o el usuario).",
+           "-- Ninguna operacion guarda los cambios por si sola: lo hace el programa Python al terminar bien.",
            "SET DEFINE OFF", ""]
     for t in TABLAS:
         out.append(paquete(t))

@@ -1,4 +1,4 @@
--- Script 04: vistas para los reportes.
+-- Script 04: vistas (consultas guardadas) para los reportes.
 SET DEFINE OFF
 
 CREATE OR REPLACE VIEW vw_estado_cuenta AS

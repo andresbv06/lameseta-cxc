@@ -1,5 +1,5 @@
 -- Script 08: permisos por rol. Ejecutar como LAMESETA, despues de crear los roles (script 00).
--- Las tablas NO se comparten: el usuario de la aplicacion solo puede ejecutar procedimientos y paquetes.
+-- El usuario de la aplicacion no toca las tablas: solo ejecuta procedimientos y paquetes.
 SET DEFINE OFF
 
 BEGIN

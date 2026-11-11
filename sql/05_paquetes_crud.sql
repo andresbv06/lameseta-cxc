@@ -1,5 +1,5 @@
 -- Script 05: paquetes con el CRUD de las 13 tablas (insertar, actualizar, eliminar, obtener, listar).
--- Ninguna operacion hace COMMIT: lo controla quien llama (el programa Python o el usuario).
+-- Ninguna operacion guarda los cambios por si sola: lo hace el programa Python al terminar bien.
 SET DEFINE OFF
 
 CREATE OR REPLACE PACKAGE pkg_zona AS

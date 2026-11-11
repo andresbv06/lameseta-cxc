@@ -1,5 +1,5 @@
--- Script 09: datos de prueba. Todo se carga con los paquetes y procedimientos (no con INSERT directos),
--- asi tambien se prueban. Ejecutar una sola vez sobre tablas vacias.
+-- Script 09: datos de prueba. Se cargan usando los paquetes (no INSERT directos),
+-- asi tambien se prueban. Ejecutar una sola vez, con las tablas vacias.
 -- Usuarios de ejemplo: admin / Admin2026, mrojas y lsolis / Vende2026, jvargas y kmora / Cobra2026.
 SET DEFINE OFF
 SET SERVEROUTPUT ON

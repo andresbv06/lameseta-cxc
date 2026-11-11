@@ -1,4 +1,4 @@
-"""Operaciones de negocio. Todas llaman procedimientos o funciones de Oracle; ninguna escribe SQL."""
+"""Operaciones del negocio. Todas llaman procedimientos o funciones de Oracle."""
 from datetime import datetime
 from decimal import Decimal
 
@@ -15,8 +15,8 @@ def cambiar_clave(sesion: Sesion, id_empleado: int, clave_actual: str, clave_nue
 
 
 def facturar(sesion: Sesion, id_cliente: int, id_empleado: int, items, fecha_emision=None) -> int:
-    """Crea la factura, agrega cada producto del detalle y la finaliza (valida limite de credito).
-    items: lista de (id_producto, cantidad). Todo ocurre en una sola transaccion."""
+    """Crea la factura, agrega los productos y la finaliza (revisa el limite de credito).
+    items: lista de (id_producto, cantidad). Si algo falla, no se guarda nada."""
     if not items:
         raise ValueError("La factura necesita al menos un producto.")
     (id_factura,) = sesion.ejecutar("PKG_FACTURA.SP_INSERTAR", id_cliente, id_empleado, fecha_emision, Salida(int))
@@ -36,7 +36,7 @@ def registrar_nota_credito(sesion: Sesion, id_factura: int, monto, motivo: str, 
 
 
 def registrar_pago(sesion: Sesion, id_cliente: int, id_metodo_pago: int, monto, referencia=None, fecha_pago=None) -> dict:
-    """Registra el pago y lo aplica a las facturas mas antiguas."""
+    """Registra el pago y lo aplica a las facturas mas viejas primero."""
     id_pago, aplicado, sobrante = sesion.ejecutar(
         "SP_REGISTRAR_PAGO_Y_APLICAR", id_cliente, id_metodo_pago, fecha_pago, monto, referencia,
         Salida(int), Salida(float), Salida(float))

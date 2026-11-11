@@ -1,5 +1,5 @@
 -- Script 06: procedimientos de negocio y de reportes.
--- No hacen COMMIT. Los reportes devuelven un cursor (SYS_REFCURSOR).
+-- Los reportes (sp_rep_*) devuelven una lista de filas que el programa Python recorre.
 SET DEFINE OFF
 
 CREATE OR REPLACE PROCEDURE sp_iniciar_sesion(

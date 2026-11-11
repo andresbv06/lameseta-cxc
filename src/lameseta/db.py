@@ -1,5 +1,5 @@
-"""Conexion a Oracle con python-oracledb (modo Thin).
-Regla del proyecto: aqui NO hay consultas SQL. Todo se hace llamando procedimientos, funciones y paquetes."""
+"""Conexion a Oracle.
+Regla del proyecto: aqui no hay consultas SQL. Solo se llaman procedimientos, funciones y paquetes."""
 import re
 from contextlib import contextmanager
 from decimal import Decimal
@@ -12,7 +12,7 @@ oracledb.defaults.fetch_decimals = True  # los NUMBER llegan como Decimal (diner
 
 
 class ErrorNegocio(Exception):
-    """Error pensado para el usuario: viene de un RAISE_APPLICATION_ERROR (ORA-20xxx) de la base de datos."""
+    """Error de negocio: un mensaje de la base de datos pensado para mostrarse al usuario."""
 
     def __init__(self, mensaje: str, codigo: int = 0):
         super().__init__(mensaje)
@@ -20,7 +20,7 @@ class ErrorNegocio(Exception):
 
 
 class ErrorBD(Exception):
-    """Cualquier otro error de Oracle."""
+    """Cualquier otro error de la base de datos."""
 
     def __init__(self, mensaje: str, codigo: int = 0):
         super().__init__(mensaje)
@@ -31,7 +31,7 @@ _PATRON_ORA = re.compile(r"ORA-(\d{5}):\s*(.*)")
 
 
 def traducir_error(error: Exception) -> Exception:
-    """Convierte oracledb.DatabaseError en ErrorNegocio (ORA-20xxx) o ErrorBD."""
+    """Convierte el error de Oracle en un mensaje claro."""
     texto = str(error)
     m = _PATRON_ORA.search(texto)
     if not m:
@@ -43,20 +43,20 @@ def traducir_error(error: Exception) -> Exception:
 
 
 class Salida:
-    """Marca un parametro OUT. Tipos: int, str, float."""
+    """Marca un dato que el procedimiento devuelve (int, str o float)."""
 
     def __init__(self, tipo=int):
         self.tipo = tipo
 
 
 class Sesion:
-    """Una conexion con una transaccion abierta. Se obtiene con BaseDatos.sesion()."""
+    """Una conexion abierta. Se obtiene con BaseDatos.sesion()."""
 
     def __init__(self, conexion):
         self._conexion = conexion
 
     def ejecutar(self, nombre: str, *argumentos):
-        """Llama un procedimiento. Devuelve la lista de valores de los parametros Salida (en orden)."""
+        """Llama un procedimiento y devuelve los valores de salida, en orden."""
         cursor = self._conexion.cursor()
         try:
             binds, salidas = [], []
@@ -73,7 +73,7 @@ class Sesion:
             cursor.close()
 
     def consultar(self, nombre: str, *argumentos):
-        """Llama un procedimiento cuyo ultimo parametro es un SYS_REFCURSOR. Devuelve (columnas, filas)."""
+        """Llama un procedimiento que devuelve una lista de filas. Retorna (columnas, filas)."""
         cursor = self._conexion.cursor()
         referencia = self._conexion.cursor()
         try:
@@ -86,7 +86,7 @@ class Sesion:
             cursor.close()
 
     def funcion(self, nombre: str, tipo_retorno, *argumentos):
-        """Llama una funcion almacenada y devuelve su resultado."""
+        """Llama una funcion y devuelve su resultado."""
         cursor = self._conexion.cursor()
         try:
             return cursor.callfunc(nombre, tipo_retorno, list(argumentos))
@@ -113,7 +113,7 @@ class BaseDatos:
 
     @contextmanager
     def sesion(self):
-        """Abre una sesion. Si todo sale bien hace COMMIT; si algo falla hace ROLLBACK."""
+        """Abre una sesion. Si todo sale bien guarda los cambios; si algo falla los deshace."""
         if self._pool is None:
             self.abrir()
         conexion = self._pool.acquire()

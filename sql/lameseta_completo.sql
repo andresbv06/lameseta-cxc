@@ -3,7 +3,7 @@ SET DEFINE OFF
 
 PROMPT >>> 01_tablas
 -- Script 01: tablas, secuencias, indices y comentarios.
--- Ejecutar conectado como el usuario LAMESETA (PDB, no CDB$ROOT).
+-- Ejecutar conectado como el usuario LAMESETA.
 
 CREATE SEQUENCE seq_zona START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_empleado START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
@@ -314,7 +314,7 @@ COMMENT ON COLUMN bitacora.detalle IS 'Resumen del cambio.';
 
 
 PROMPT >>> 02_funciones
--- Script 02: funciones (solo leen datos, no hacen COMMIT).
+-- Script 02: funciones. Solo consultan datos, no los cambian.
 
 CREATE OR REPLACE FUNCTION fn_hash_clave(p_usuario IN VARCHAR2, p_clave IN VARCHAR2)
 RETURN VARCHAR2 IS
@@ -655,7 +655,7 @@ END sp_recalcular_factura;
 
 
 PROMPT >>> 04_vistas
--- Script 04: vistas para los reportes.
+-- Script 04: vistas (consultas guardadas) para los reportes.
 
 CREATE OR REPLACE VIEW vw_estado_cuenta AS
 SELECT f.id_cliente,
@@ -812,7 +812,7 @@ SELECT NVL(SUM(saldo_pendiente), 0) AS cartera_total,
 
 PROMPT >>> 05_paquetes_crud
 -- Script 05: paquetes con el CRUD de las 13 tablas (insertar, actualizar, eliminar, obtener, listar).
--- Ninguna operacion hace COMMIT: lo controla quien llama (el programa Python o el usuario).
+-- Ninguna operacion guarda los cambios por si sola: lo hace el programa Python al terminar bien.
 
 CREATE OR REPLACE PACKAGE pkg_zona AS
   PROCEDURE sp_insertar(
@@ -2640,7 +2640,7 @@ END pkg_bitacora;
 
 PROMPT >>> 06_procedimientos_negocio
 -- Script 06: procedimientos de negocio y de reportes.
--- No hacen COMMIT. Los reportes devuelven un cursor (SYS_REFCURSOR).
+-- Los reportes (sp_rep_*) devuelven una lista de filas que el programa Python recorre.
 
 CREATE OR REPLACE PROCEDURE sp_iniciar_sesion(
     p_usuario IN VARCHAR2,
@@ -3078,7 +3078,7 @@ END sp_rep_detalle_factura;
 
 
 PROMPT >>> 07_triggers
--- Script 07: disparadores.
+-- Script 07: disparadores (triggers). Se ejecutan solos cuando cambia una tabla.
 
 CREATE OR REPLACE TRIGGER trg_factura_estado
 BEFORE INSERT OR UPDATE OF monto_total, saldo_pendiente, estado ON factura
@@ -3182,7 +3182,7 @@ END trg_bitacora_cliente_limite;
 
 PROMPT >>> 08_permisos
 -- Script 08: permisos por rol. Ejecutar como LAMESETA, despues de crear los roles (script 00).
--- Las tablas NO se comparten: el usuario de la aplicacion solo puede ejecutar procedimientos y paquetes.
+-- El usuario de la aplicacion no toca las tablas: solo ejecuta procedimientos y paquetes.
 
 BEGIN
   FOR o IN (SELECT object_name
@@ -3236,8 +3236,8 @@ GRANT EXECUTE ON fn_cliente_es_moroso TO rol_cobrador;
 
 
 PROMPT >>> 09_datos_prueba
--- Script 09: datos de prueba. Todo se carga con los paquetes y procedimientos (no con INSERT directos),
--- asi tambien se prueban. Ejecutar una sola vez sobre tablas vacias.
+-- Script 09: datos de prueba. Se cargan usando los paquetes (no INSERT directos),
+-- asi tambien se prueban. Ejecutar una sola vez, con las tablas vacias.
 -- Usuarios de ejemplo: admin / Admin2026, mrojas y lsolis / Vende2026, jvargas y kmora / Cobra2026.
 SET SERVEROUTPUT ON
 

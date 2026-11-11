@@ -1,5 +1,5 @@
 -- Script 01: tablas, secuencias, indices y comentarios.
--- Ejecutar conectado como el usuario LAMESETA (PDB, no CDB$ROOT).
+-- Ejecutar conectado como el usuario LAMESETA.
 SET DEFINE OFF
 
 CREATE SEQUENCE seq_zona START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;

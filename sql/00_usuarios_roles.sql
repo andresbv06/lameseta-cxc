@@ -1,6 +1,6 @@
 -- Script 00: usuarios y roles.
--- Ejecutar como SYSTEM conectado al PDB (por ejemplo ORCLPDB), NO en CDB$ROOT.
--- Cambie las claves de ejemplo antes de usarlo fuera de pruebas.
+-- Ejecutar como SYSTEM, conectado a la base orclpdb (no a la conexion SYS_CDB).
+-- Estas claves son de prueba.
 SET DEFINE OFF
 
 CREATE ROLE rol_admin;

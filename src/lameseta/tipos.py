@@ -1,4 +1,4 @@
-"""Tipos de datos que describen cada entidad (tabla) y cada campo."""
+"""Describe cada tabla y sus campos."""
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 

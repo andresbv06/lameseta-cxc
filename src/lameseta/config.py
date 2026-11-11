@@ -1,5 +1,4 @@
-"""Configuracion de la conexion. Los datos secretos vienen de variables de entorno o de un archivo .env
-que NO se sube al repositorio (ver .gitignore)."""
+"""Datos de conexion. Las claves se leen del archivo .env, que no se sube a GitHub."""
 import os
 from dataclasses import dataclass
 
@@ -26,7 +25,7 @@ class Configuracion:
 
 
 def cargar_archivo_env(ruta: str = ".env") -> None:
-    """Lee lineas CLAVE=valor y las pone en el entorno (sin pisar lo que ya exista)."""
+    """Lee el archivo .env (lineas CLAVE=valor)."""
     if not os.path.exists(ruta):
         return
     with open(ruta, encoding="utf-8") as f:

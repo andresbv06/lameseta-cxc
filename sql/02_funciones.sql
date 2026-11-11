@@ -1,4 +1,4 @@
--- Script 02: funciones (solo leen datos, no hacen COMMIT).
+-- Script 02: funciones. Solo consultan datos, no los cambian.
 SET DEFINE OFF
 
 CREATE OR REPLACE FUNCTION fn_hash_clave(p_usuario IN VARCHAR2, p_clave IN VARCHAR2)
