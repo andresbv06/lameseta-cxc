@@ -1,0 +1,844 @@
+[
+ {
+  "tabla": "ZONA",
+  "descripcion": "Zonas de reparto y cobro de la empresa.",
+  "columnas": [
+   {
+    "columna": "id_zona",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la zona."
+   },
+   {
+    "columna": "nombre_zona",
+    "tipo": "VARCHAR2(60)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Nombre de la zona."
+   },
+   {
+    "columna": "provincia",
+    "tipo": "VARCHAR2(40)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Provincia a la que pertenece."
+   }
+  ],
+  "secuencia": "SEQ_ZONA",
+  "pk": [
+   "id_zona"
+  ]
+ },
+ {
+  "tabla": "EMPLEADO",
+  "descripcion": "Vendedores, cobradores y administradores con su usuario del sistema.",
+  "columnas": [
+   {
+    "columna": "id_empleado",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del empleado."
+   },
+   {
+    "columna": "id_zona",
+    "tipo": "NUMBER(10)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "FK -> ZONA.id_zona",
+    "reglas": "",
+    "descripcion": "Zona asignada (puede ser nula para administradores)."
+   },
+   {
+    "columna": "nombre",
+    "tipo": "VARCHAR2(60)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Nombre."
+   },
+   {
+    "columna": "apellido",
+    "tipo": "VARCHAR2(60)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Apellidos."
+   },
+   {
+    "columna": "correo",
+    "tipo": "VARCHAR2(100)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "correo IS NULL OR correo LIKE '%_@_%._%'",
+    "descripcion": "Correo electronico."
+   },
+   {
+    "columna": "rol",
+    "tipo": "VARCHAR2(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "Valores: ADMIN, VENDEDOR, COBRADOR",
+    "descripcion": "Rol en el sistema."
+   },
+   {
+    "columna": "usuario",
+    "tipo": "VARCHAR2(30)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Nombre de usuario para iniciar sesion."
+   },
+   {
+    "columna": "clave_hash",
+    "tipo": "VARCHAR2(64)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Clave guardada como hash SHA-256 con sal."
+   },
+   {
+    "columna": "activo",
+    "tipo": "NUMBER(1)",
+    "nulo": "No",
+    "defecto": "1",
+    "llave": "",
+    "reglas": "Valores: 0, 1",
+    "descripcion": "1 = activo, 0 = inactivo."
+   }
+  ],
+  "secuencia": "SEQ_EMPLEADO",
+  "pk": [
+   "id_empleado"
+  ]
+ },
+ {
+  "tabla": "CLIENTE",
+  "descripcion": "Negocios que compran a credito, con su limite y dias de credito.",
+  "columnas": [
+   {
+    "columna": "id_cliente",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del cliente."
+   },
+   {
+    "columna": "id_zona",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> ZONA.id_zona",
+    "reglas": "",
+    "descripcion": "Zona donde esta el cliente."
+   },
+   {
+    "columna": "id_vendedor",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> EMPLEADO.id_empleado",
+    "reglas": "",
+    "descripcion": "Vendedor que atiende al cliente."
+   },
+   {
+    "columna": "cedula",
+    "tipo": "VARCHAR2(20)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Cedula fisica o juridica."
+   },
+   {
+    "columna": "nombre_comercial",
+    "tipo": "VARCHAR2(100)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Nombre del negocio."
+   },
+   {
+    "columna": "correo",
+    "tipo": "VARCHAR2(100)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "correo IS NULL OR correo LIKE '%_@_%._%'",
+    "descripcion": "Correo de contacto."
+   },
+   {
+    "columna": "telefono",
+    "tipo": "VARCHAR2(20)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Telefono de contacto."
+   },
+   {
+    "columna": "direccion",
+    "tipo": "VARCHAR2(200)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Direccion del negocio."
+   },
+   {
+    "columna": "limite_credito",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "0",
+    "llave": "",
+    "reglas": "limite_credito >= 0",
+    "descripcion": "Monto maximo que puede deber."
+   },
+   {
+    "columna": "dias_credito",
+    "tipo": "NUMBER(3)",
+    "nulo": "No",
+    "defecto": "15",
+    "llave": "",
+    "reglas": "dias_credito BETWEEN 0 AND 90",
+    "descripcion": "Dias de plazo para pagar."
+   },
+   {
+    "columna": "estado",
+    "tipo": "VARCHAR2(10)",
+    "nulo": "No",
+    "defecto": "'ACTIVO'",
+    "llave": "",
+    "reglas": "Valores: ACTIVO, INACTIVO, SUSPENDIDO",
+    "descripcion": "Estado del cliente."
+   }
+  ],
+  "secuencia": "SEQ_CLIENTE",
+  "pk": [
+   "id_cliente"
+  ]
+ },
+ {
+  "tabla": "CATEGORIA",
+  "descripcion": "Categorias para agrupar los productos.",
+  "columnas": [
+   {
+    "columna": "id_categoria",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la categoria."
+   },
+   {
+    "columna": "nombre_categoria",
+    "tipo": "VARCHAR2(60)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Nombre de la categoria."
+   }
+  ],
+  "secuencia": "SEQ_CATEGORIA",
+  "pk": [
+   "id_categoria"
+  ]
+ },
+ {
+  "tabla": "PRODUCTO",
+  "descripcion": "Catalogo de productos con precio y existencias.",
+  "columnas": [
+   {
+    "columna": "id_producto",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del producto."
+   },
+   {
+    "columna": "id_categoria",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> CATEGORIA.id_categoria",
+    "reglas": "",
+    "descripcion": "Categoria del producto."
+   },
+   {
+    "columna": "codigo",
+    "tipo": "VARCHAR2(20)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Codigo interno."
+   },
+   {
+    "columna": "nombre_producto",
+    "tipo": "VARCHAR2(100)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Nombre del producto."
+   },
+   {
+    "columna": "precio_unitario",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "precio_unitario > 0",
+    "descripcion": "Precio de venta actual."
+   },
+   {
+    "columna": "stock_actual",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "0",
+    "llave": "",
+    "reglas": "stock_actual >= 0",
+    "descripcion": "Unidades disponibles."
+   },
+   {
+    "columna": "activo",
+    "tipo": "NUMBER(1)",
+    "nulo": "No",
+    "defecto": "1",
+    "llave": "",
+    "reglas": "Valores: 0, 1",
+    "descripcion": "1 = a la venta, 0 = descontinuado."
+   }
+  ],
+  "secuencia": "SEQ_PRODUCTO",
+  "pk": [
+   "id_producto"
+  ]
+ },
+ {
+  "tabla": "METODO_PAGO",
+  "descripcion": "Formas en que un cliente puede pagar.",
+  "columnas": [
+   {
+    "columna": "id_metodo_pago",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del metodo de pago."
+   },
+   {
+    "columna": "nombre_metodo",
+    "tipo": "VARCHAR2(40)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Efectivo, transferencia, cheque, SINPE Movil."
+   }
+  ],
+  "secuencia": "SEQ_METODO_PAGO",
+  "pk": [
+   "id_metodo_pago"
+  ]
+ },
+ {
+  "tabla": "FACTURA",
+  "descripcion": "Venta a credito con monto, vencimiento y saldo pendiente.",
+  "columnas": [
+   {
+    "columna": "id_factura",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la factura."
+   },
+   {
+    "columna": "id_cliente",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> CLIENTE.id_cliente",
+    "reglas": "",
+    "descripcion": "Cliente al que se factura."
+   },
+   {
+    "columna": "id_empleado",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> EMPLEADO.id_empleado",
+    "reglas": "",
+    "descripcion": "Vendedor que hizo la venta."
+   },
+   {
+    "columna": "numero_factura",
+    "tipo": "VARCHAR2(20)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "UQ",
+    "reglas": "",
+    "descripcion": "Numero visible de la factura."
+   },
+   {
+    "columna": "fecha_emision",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha en que se emitio."
+   },
+   {
+    "columna": "fecha_vencimiento",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha limite de pago."
+   },
+   {
+    "columna": "monto_total",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "0",
+    "llave": "",
+    "reglas": "monto_total >= 0",
+    "descripcion": "Total de la factura (suma del detalle)."
+   },
+   {
+    "columna": "saldo_pendiente",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "0",
+    "llave": "",
+    "reglas": "saldo_pendiente >= 0",
+    "descripcion": "Lo que falta por pagar (total - notas - pagos)."
+   },
+   {
+    "columna": "estado",
+    "tipo": "VARCHAR2(10)",
+    "nulo": "No",
+    "defecto": "'PENDIENTE'",
+    "llave": "",
+    "reglas": "Valores: PENDIENTE, PAGADA, ANULADA",
+    "descripcion": "Estado de la factura."
+   }
+  ],
+  "secuencia": "SEQ_FACTURA",
+  "pk": [
+   "id_factura"
+  ]
+ },
+ {
+  "tabla": "DETALLE_FACTURA",
+  "descripcion": "Productos vendidos en cada factura (tabla intermedia FACTURA-PRODUCTO).",
+  "columnas": [
+   {
+    "columna": "id_factura",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK, FK -> FACTURA.id_factura",
+    "reglas": "",
+    "descripcion": "Factura a la que pertenece."
+   },
+   {
+    "columna": "id_producto",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK, FK -> PRODUCTO.id_producto",
+    "reglas": "",
+    "descripcion": "Producto vendido."
+   },
+   {
+    "columna": "cantidad",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "cantidad > 0",
+    "descripcion": "Unidades vendidas."
+   },
+   {
+    "columna": "precio_unitario",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "precio_unitario > 0",
+    "descripcion": "Precio al momento de la venta."
+   }
+  ],
+  "secuencia": "",
+  "pk": [
+   "id_factura",
+   "id_producto"
+  ]
+ },
+ {
+  "tabla": "NOTA_CREDITO",
+  "descripcion": "Descuentos o devoluciones que reducen el saldo de una factura.",
+  "columnas": [
+   {
+    "columna": "id_nota",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la nota."
+   },
+   {
+    "columna": "id_factura",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> FACTURA.id_factura",
+    "reglas": "",
+    "descripcion": "Factura afectada."
+   },
+   {
+    "columna": "fecha_nota",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha de la nota."
+   },
+   {
+    "columna": "monto",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "monto > 0",
+    "descripcion": "Monto que se descuenta."
+   },
+   {
+    "columna": "motivo",
+    "tipo": "VARCHAR2(200)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Razon de la nota de credito."
+   }
+  ],
+  "secuencia": "SEQ_NOTA_CREDITO",
+  "pk": [
+   "id_nota"
+  ]
+ },
+ {
+  "tabla": "PAGO",
+  "descripcion": "Dinero recibido de un cliente.",
+  "columnas": [
+   {
+    "columna": "id_pago",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del pago."
+   },
+   {
+    "columna": "id_cliente",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> CLIENTE.id_cliente",
+    "reglas": "",
+    "descripcion": "Cliente que pago."
+   },
+   {
+    "columna": "id_metodo_pago",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> METODO_PAGO.id_metodo_pago",
+    "reglas": "",
+    "descripcion": "Forma de pago usada."
+   },
+   {
+    "columna": "fecha_pago",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha en que se recibio el pago."
+   },
+   {
+    "columna": "monto",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "monto > 0",
+    "descripcion": "Monto recibido."
+   },
+   {
+    "columna": "referencia",
+    "tipo": "VARCHAR2(50)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Numero de transferencia, cheque o comprobante."
+   },
+   {
+    "columna": "monto_sin_aplicar",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "0",
+    "llave": "",
+    "reglas": "monto_sin_aplicar >= 0",
+    "descripcion": "Parte del pago que aun no se reparte entre facturas."
+   }
+  ],
+  "secuencia": "SEQ_PAGO",
+  "pk": [
+   "id_pago"
+  ]
+ },
+ {
+  "tabla": "APLICACION_PAGO",
+  "descripcion": "Reparto de un pago entre una o mas facturas (tabla intermedia PAGO-FACTURA).",
+  "columnas": [
+   {
+    "columna": "id_aplicacion",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la aplicacion."
+   },
+   {
+    "columna": "id_pago",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> PAGO.id_pago",
+    "reglas": "",
+    "descripcion": "Pago que se reparte."
+   },
+   {
+    "columna": "id_factura",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> FACTURA.id_factura",
+    "reglas": "",
+    "descripcion": "Factura que recibe el monto."
+   },
+   {
+    "columna": "monto_aplicado",
+    "tipo": "NUMBER(12,2)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "monto_aplicado > 0",
+    "descripcion": "Monto aplicado a la factura."
+   },
+   {
+    "columna": "fecha_aplicacion",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha en que se aplico."
+   }
+  ],
+  "secuencia": "SEQ_APLICACION_PAGO",
+  "pk": [
+   "id_aplicacion"
+  ]
+ },
+ {
+  "tabla": "GESTION_COBRO",
+  "descripcion": "Historial de llamadas, visitas y promesas de pago a los clientes.",
+  "columnas": [
+   {
+    "columna": "id_gestion",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador de la gestion."
+   },
+   {
+    "columna": "id_cliente",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> CLIENTE.id_cliente",
+    "reglas": "",
+    "descripcion": "Cliente contactado."
+   },
+   {
+    "columna": "id_factura",
+    "tipo": "NUMBER(10)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "FK -> FACTURA.id_factura",
+    "reglas": "",
+    "descripcion": "Factura de la que se habla (opcional)."
+   },
+   {
+    "columna": "id_empleado",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "FK -> EMPLEADO.id_empleado",
+    "reglas": "",
+    "descripcion": "Cobrador que hizo la gestion."
+   },
+   {
+    "columna": "fecha_hora",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha y hora del contacto."
+   },
+   {
+    "columna": "tipo_gestion",
+    "tipo": "VARCHAR2(15)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "Valores: LLAMADA, CORREO, VISITA, WHATSAPP",
+    "descripcion": "Medio usado."
+   },
+   {
+    "columna": "resultado",
+    "tipo": "VARCHAR2(20)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "Valores: PROMESA_PAGO, SIN_RESPUESTA, PAGO_REALIZADO, DISPUTA, OTRO",
+    "descripcion": "Resultado del contacto."
+   },
+   {
+    "columna": "fecha_promesa",
+    "tipo": "DATE",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Fecha prometida de pago."
+   },
+   {
+    "columna": "observacion",
+    "tipo": "VARCHAR2(300)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Notas de la gestion."
+   }
+  ],
+  "secuencia": "SEQ_GESTION_COBRO",
+  "pk": [
+   "id_gestion"
+  ]
+ },
+ {
+  "tabla": "BITACORA",
+  "descripcion": "Registro de cambios hecho por los disparadores (sin llaves foraneas a proposito).",
+  "columnas": [
+   {
+    "columna": "id_bitacora",
+    "tipo": "NUMBER(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "PK",
+    "reglas": "",
+    "descripcion": "Identificador del registro."
+   },
+   {
+    "columna": "tabla_afectada",
+    "tipo": "VARCHAR2(30)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Tabla que cambio."
+   },
+   {
+    "columna": "operacion",
+    "tipo": "VARCHAR2(10)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "Valores: INSERT, UPDATE, DELETE",
+    "descripcion": "Tipo de cambio."
+   },
+   {
+    "columna": "usuario_bd",
+    "tipo": "VARCHAR2(30)",
+    "nulo": "No",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Usuario de la base de datos que hizo el cambio."
+   },
+   {
+    "columna": "fecha_hora",
+    "tipo": "DATE",
+    "nulo": "No",
+    "defecto": "SYSDATE",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Momento del cambio."
+   },
+   {
+    "columna": "detalle",
+    "tipo": "VARCHAR2(400)",
+    "nulo": "Sí",
+    "defecto": "",
+    "llave": "",
+    "reglas": "",
+    "descripcion": "Resumen del cambio."
+   }
+  ],
+  "secuencia": "SEQ_BITACORA",
+  "pk": [
+   "id_bitacora"
+  ]
+ }
+]
